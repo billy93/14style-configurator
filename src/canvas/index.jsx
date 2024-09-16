@@ -2,9 +2,9 @@ import { Canvas } from '@react-three/fiber'
 import { Center } from '@react-three/drei';
 import Shirt from './Shirt';
 import CameraRig from './CameraRig';
-import ShirtApp from './ShirtApp';
+import ShirtApp from './ShirtApp.jsx';
 
-const CanvasModel = () => {
+const CanvasModel = (props) => {
   return (
     <Canvas
       camera={{ position: [0, 0, 0], fov: 25 }}
@@ -15,7 +15,7 @@ const CanvasModel = () => {
 
       <CameraRig>
         {/* <Center> */}
-          <ShirtApp />
+          <ShirtApp onRightClick={props.onRightClick}/>
         {/* </Center> */}
       </CameraRig>
     </Canvas>

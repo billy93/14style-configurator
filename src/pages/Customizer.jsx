@@ -156,7 +156,26 @@ const Customizer = () => {
               handleClick={() => state.intro = true}
               customStyles="w-fit px-4 py-2.5 font-bold text-sm"
             />
+
+            &nbsp;&nbsp;
+            {/* <CustomButton 
+              type="filled"
+              title="Add new Accesories"
+              handleClick={() => {
+                state.decals.push(
+                  {
+                    position: [ 0, 0.04, 0.15 ],
+                    scale: 0.15,
+                    rotation: [0,0,0],
+                    active: false,
+                    image: "./threejs.png"
+                  }
+                )
+              }}
+              customStyles="w-fit px-4 py-2.5 font-bold text-sm"
+            /> */}
           </motion.div>
+
 
           <motion.div
             className='filtertabs-container'
