@@ -15,7 +15,7 @@ const CanvasModel = (props) => {
 
       <CameraRig>
         {/* <Center> */}
-          <ShirtApp onRightClick={props.onRightClick}/>
+          <ShirtApp onRightClick={props.onRightClick} set={props.set}/>
         {/* </Center> */}
       </CameraRig>
     </Canvas>

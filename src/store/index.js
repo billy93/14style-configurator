@@ -12,20 +12,20 @@ const state = proxy({
   fullDecal: './texture.jpeg',
 
   decals: [
-    {
-      position: [ 0, 0.04, 0.15 ],
-      scale: 0.15,
-      rotation: [0,0,0],
-      active: false,
-      image: "./threejs.png"
-    },
-    {
-      position: [ 0, -0.2, 0.15 ],
-      scale: 0.15,
-      rotation: [0,0,0],
-      active: false,
-      image: "./starbucks.png"
-    },
+    // {
+    //   position: [ 0, 0.04, 0.15 ],
+    //   scale: 0.15,
+    //   rotation: [0,0,0],
+    //   active: false,
+    //   image: "./threejs.png"
+    // },
+    // {
+    //   position: [ 0, -0.2, 0.15 ],
+    //   scale: 0.15,
+    //   rotation: [0,0,0],
+    //   active: false,
+    //   image: "./starbucks.png"
+    // },
     // {
     //   position: [ 0, 0.04, 0.15 ],
     //   scale: 0.15,
