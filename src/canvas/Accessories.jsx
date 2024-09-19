@@ -1,15 +1,18 @@
 import { Decal, PivotControls, useTexture } from '@react-three/drei'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { useKeyboard } from '../components/useKeyboard';
 import { useFrame } from '@react-three/fiber';
 import state from '../store';
 import { useSnapshot } from 'valtio';
 
-const Accessories = ({item, index, snap, state, set}) => {
+const Accessories = ({item, index, snap, state, set, nodes, meshRef}) => {
     const keyboard = useKeyboard();
+    const [position, setPosition] = useState(item.position);
+    const [rotation, setRotation] = useState(item.rotation);
     // const [rotationTemp, setRotationTemp] = useState()
 
+    console.log(meshRef)
     useFrame((s, delta) => {
         if (item.active) {
             let speed = 0.002; // Movement speed
@@ -37,41 +40,69 @@ const Accessories = ({item, index, snap, state, set}) => {
             if (keyboard['q']) updatePosition([0, 0, -speed]);
             if (keyboard['e']) updatePosition([0, 0, speed]);
 
-            speed = 0.05; // Movement speed
+            // speed = 0.05; // Movement speed
 
-            if(keyboard['i']) updateRotation([-speed, 0, 0]);
-            if(keyboard['k']) updateRotation([speed, 0, 0]);
+            // if(keyboard['i']) updateRotation([-speed, 0, 0]);
+            // if(keyboard['k']) updateRotation([speed, 0, 0]);
 
-            if(keyboard['j']) updateRotation([0, 0, speed]);
-            if(keyboard['l']) updateRotation([0, 0, -speed]);
+            // if(keyboard['j']) updateRotation([0, 0, speed]);
+            // if(keyboard['l']) updateRotation([0, 0, -speed]);
 
-            if(keyboard['u']) updateRotation([0, speed, 0]);
-            if(keyboard['o']) updateRotation([0, -speed, 0]);
+            // if(keyboard['u']) updateRotation([0, speed, 0]);
+            // if(keyboard['o']) updateRotation([0, -speed, 0]);
 
           }
     });
-
+  
+    const groupRef = useRef();
+    // const meshRef = useRef();
+ const targetPosition = new THREE.Vector3();
+ // State to manage the smoothed position for better control over movement
+ const [smoothPosition] = useState(() => new THREE.Vector3(...item.position));
   return (
     <>
     {item.active &&
-    <group position={new THREE.Vector3(item.position[0], item.position[1], item.position[2])} >
+    <group ref={groupRef} 
+    position={new THREE.Vector3(position[0], position[1], position[2])} 
+    >
         <PivotControls
-        scale={item.scale}
-        rotation={new THREE.Euler(item.rotation[0], item.rotation[1], item.rotation[2])}
+        scale={0.5}
+        rotation={new THREE.Euler(rotation[0], rotation[1], rotation[2])}
         activeAxes={[true, true, true]}
         onDrag={(local) => {          
-            /*       
-            const currentPosition = new THREE.Vector3(item.position[0],item.position[1],item.position[2])                  
-            const currentRotation = new THREE.Euler(item.rotation[0],item.rotation[1],item.rotation[2])                  
-            const pos = new THREE.Vector3()
-            const scl = new THREE.Vector3()
-            const quaternion = new THREE.Quaternion()
-            local.decompose(pos, quaternion, scl)
+              // Get the dragged position as the target
+              local.decompose(targetPosition, new THREE.Quaternion(), new THREE.Vector3());
 
-            const finalPos = currentPosition.add(pos);
+              // Interpolate between the current and target positions for smooth movement
+              smoothPosition.lerp(targetPosition, 0.3); // 0.1 is the interpolation factor (adjust for smoothness)
+
+              // Update the object's local position for smooth animation
+              meshRef.current.position.set(smoothPosition.x, smoothPosition.y, smoothPosition.z);
+
+              // Update the state with the smoothed position
+              // set({
+              //   [`position_${index}`]: [smoothPosition.x, smoothPosition.y, smoothPosition.z],
+              // });
+
+              // Update the state.decals array for global reference
+              // state.decals[index].position = [smoothPosition.x, smoothPosition.y, smoothPosition.z];
+            
+            // const currentPosition = new THREE.Vector3(item.position[0],item.position[1],item.position[2])                  
+            // const currentRotation = new THREE.Euler(item.rotation[0],item.rotation[1],item.rotation[2])                  
+            // const pos = new THREE.Vector3()
+            // const scl = new THREE.Vector3()
+            // const quaternion = new THREE.Quaternion()
+            // local.decompose(pos, quaternion, scl)
+            // const finalPos = currentPosition.add(pos);
+            // state.decals[index].position = [pos.x, pos.y, pos.z];
+            // set({
+            //     [`position_${index}`]: [pos.x, pos.y, pos.z],
+            //     // [`rotation_${index}`]: [resultEuler.x, resultEuler.y, resultEuler.z], // Rotation reflects the current state
+            // });
             // Convert quaternion to Euler angles for rotation (no scaling factor)
-            const rot = new THREE.Euler().setFromQuaternion(quaternion, "XYZ");
-
+            // const rot = new THREE.Euler().setFromQuaternion(quaternion, "XYZ");
+            /*       
+            
             const sensitivity = 0.1; 
             // Combine current rotation with the rotation change from dragging
             const resultEuler = new THREE.Euler(
@@ -100,7 +131,10 @@ const Accessories = ({item, index, snap, state, set}) => {
         />
     </group>           
     }
-    <Decal debug={item.active} position={item.position} rotation={item.rotation} scale={item.scale} map={useTexture(item.image)} />
+    {/* <mesh position={item.position} rotation={item.rotation} scale={item.scale}> */}
+      <Decal debug={item.active}  position={item.position} rotation={item.rotation} scale={item.scale} map={useTexture(item.image)}/>
+    {/* </mesh> */}
+    {/* <Decal debug={item.active} position={item.position} rotation={item.rotation} scale={item.scale} map={useTexture(item.image)} /> */}
     </> 
   )
 }

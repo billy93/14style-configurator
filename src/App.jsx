@@ -6,6 +6,7 @@ import Test from './Test';
 import state from './store';
 import { useSnapshot } from 'valtio';
 import { useControls, button } from 'leva';
+import ShirtWithDecal from './ShirtWithDecal';
 
 function App() {
   const snap = useSnapshot(state);
@@ -43,6 +44,10 @@ function App() {
         value: decal.active,
         onChange: (value) => {
           state.decals[index].active = value;
+
+          if(value){
+            state.index = index;
+          }
         },
       };
       acc[`image_${index}`] = decal.image;
@@ -116,14 +121,14 @@ function App() {
   const handleSelectImage = (image) => {
     state.decals.push(
       {
-        position: point,
+        position:point,
         scale: 0.15,
         rotation: rotation,
-        active: false,
+        active: true,
         image: image.src
       }
     )
-
+    state.index = state.decals.length - 1;
     closeModal();
     // let index = snap.decals.length - 1;
     // set({
@@ -182,10 +187,11 @@ function App() {
 
   return (
     <main className="app transition-all ease-in">
-      <Home />
+      {/* <Home />
       <Canvas onRightClick={handleRightClick} set={set}/>
-      <Customizer />
-       
+      <Customizer /> */}
+      <Canvas onRightClick={handleRightClick} set={set}/>
+        
        {/* {showContextMenu && (
         <div
           ref={contextMenuRef}
